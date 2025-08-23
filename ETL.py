@@ -22,5 +22,11 @@ pa_elspotprices = pa.Table.from_pandas(df_elspotprices)
 
 pq.write_table(pa_elspotprices, 'elspotprices')
 
+#filepath = "~/github.com/VilladsHJ/Case1/elspotprices"
+#elspotprices = pq.read_table(filepath)
+#print(elspotprices)
+
+
+
 #print(df_elspotprices)
 #print(pa_elspotprices)
