@@ -1,8 +1,9 @@
 import requests
 import pandas as pd
 import json
-import parquet as pq
+import parquet
 import pyarrow as pa
+import pyarrow.parquet as pq
 
 # URL til en API-endpoint
 url = "https://api.energidataservice.dk/dataset/Elspotprices"
@@ -18,7 +19,8 @@ for names in data["records"][0]:
 df_elspotprices = pd.DataFrame(data["records"][:])
 
 pa_elspotprices = pa.Table.from_pandas(df_elspotprices)
-        
 
-print(df_elspotprices)
-print(pa_elspotprices)
+pq.write_table(pa_elspotprices, 'elspotprices')
+
+#print(df_elspotprices)
+#print(pa_elspotprices)
