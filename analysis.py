@@ -35,18 +35,12 @@ for q in range(len(df_average["HourUTC"])): # Loop through unique timestamp
         if df_average["HourUTC"][q] == df_elspotprices["HourUTC"][i]: # check if timestamp is equal
             list_below_avg.append(df_average["AverageSpotPricesDKK"][q]>df_elspotprices["SpotPriceDKK"][i]) # append Boolean ("true" if spot price is below average) 
 
-df_elspotprices.insert(len(df_elspotprices.keys()), "IsBelowAvg", list_below_avg)
-print(df_elspotprices)
+df_elspotprices.insert(len(df_elspotprices.keys()), "IsBelowAvg", list_below_avg) # Inserting column into dataframe
+
 app = Dash() # initialize Dash app
 
-print(set(df_elspotprices["PriceArea"]))
-mapping = {}
-for i, area in enumerate(df_elspotprices["PriceArea"]):
-    if area not in mapping:  # only assign once
-        mapping[area] = "blue" if list_below_avg[i] else "red"
-
 fig1 = px.bar(df_elspotprices, x="HourUTC", y="SpotPriceDKK", color="PriceArea", barmode="group") # First bar plot with grouped prices
-fig2 = px.bar(df_average, x="HourUTC", y="AverageSpotPricesDKK", color="AverageSpotPricesDKK") # secon bar plot with average prices
+fig2 = px.bar(df_average, x="HourUTC", y="AverageSpotPricesDKK", color="AverageSpotPricesDKK") # second bar plot with average prices
 
 app.layout = html.Div([
         html.Div([
@@ -62,8 +56,8 @@ app.layout = html.Div([
 
 ])
 
-#if __name__ == '__main__':
-#    app.run(debug=True)
+if __name__ == '__main__':
+    app.run(debug=True)
 
 
 
