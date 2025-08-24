@@ -4,8 +4,9 @@ import json
 import parquet
 import pyarrow as pa
 import pyarrow.parquet as pq
-from ETL import pa_elspotprices
 
-elspotprices = pa_elspotprices
+
+filepath = "~/github.com/VilladsHJ/Case1/elspotprices"
+elspotprices = pq.read_table(filepath)
 print(elspotprices)
 
