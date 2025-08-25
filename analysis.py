@@ -20,45 +20,32 @@ unique_hours = list(df_elspotprices.groupby("HourUTC")["HourDK"].indices.keys())
 
 df_average_prices = average_prices.to_frame() # Convert to Pandas dataframe
 
-list_average_prices = df_average_prices["SpotPriceDKK"].to_list() # convers prices to a list
+list_average_prices = df_average_prices["SpotPriceDKK"].to_list() # Converts prices to a list - This list will be used i
 
 
 dict_average = {"HourUTC": unique_hours,
                 'AverageSpotPricesDKK': list_average_prices} # Create dictionary for dataframe with only hour and average spot price
 
 
-df_average = pd.DataFrame(dict_average) # creates pandas dataframe with HoutUTC and Average prices
+df_average = pd.DataFrame(dict_average) # Creates pandas dataframe with HourUTC and Average prices from dictionary
 
+
+# The for loop below goes through each unique timestamp and loops through all timestamps in df_elspotprices. 
+#   If there is a match on time stamp each spot price for the corresponding time stamp is compared to the average spotprice for that timestamp. 
+#   If the spot price is lower that the average spot a boolean value is stored (TRUE/FALSE) in the list "list_below_avg"
 list_below_avg = []
+list_avg = []
 for q in range(len(df_average["HourUTC"])): # Loop through unique timestamp
-    for i in range(len(df_elspotprices["HourUTC"])): # Loop through timestamps for all spotprices
+    for i in range(len(df_elspotprices["HourUTC"])-1,-1,-1): # Loop through timestamps for all spotprices - added steps to range() to reverse the order to ensure data is stored correctly 
         if df_average["HourUTC"][q] == df_elspotprices["HourUTC"][i]: # check if timestamp is equal
             list_below_avg.append(df_average["AverageSpotPricesDKK"][q]>df_elspotprices["SpotPriceDKK"][i]) # append Boolean ("true" if spot price is below average) 
+            list_avg.append(df_average["AverageSpotPricesDKK"][q])
 
-df_elspotprices.insert(len(df_elspotprices.keys()), "IsBelowAvg", list_below_avg) # Inserting column into dataframe
+df_elspotprices.insert(len(df_elspotprices.keys()), "AverageSpotPricesDKK", list_avg[::-1]) # Inserting column "AverageSpotPricesDKK" into dataframe
+df_elspotprices.insert(len(df_elspotprices.keys()), "IsBelowAvg", list_below_avg[::-1]) # Inserting column "IsBelowAvg" into dataframe
 
-app = Dash() # initialize Dash app
 
-fig1 = px.bar(df_elspotprices, x="HourUTC", y="SpotPriceDKK", color="PriceArea", barmode="group") # First bar plot with grouped prices
-fig2 = px.bar(df_average, x="HourUTC", y="AverageSpotPricesDKK", color="AverageSpotPricesDKK") # second bar plot with average prices
-
-app.layout = html.Div([
-        html.Div([
-            html.H1("Grouped Spot Prices"),
-            html.Div('''Grouped spot prices during the day'''),
-            dcc.Graph(id='Grouped', figure=fig1)
-        ]),
-        html.Div([
-            html.H1("Average Spot Prices"),
-            html.Div('''Average spot prices during the day 
-                     (rounded to nearest whole number)'''),
-            dcc.Graph(id='Average', figure=fig2)]),
-
-])
-
-if __name__ == '__main__':
-    app.run(debug=True)
-
+print(df_elspotprices.to_string())
 
 
 

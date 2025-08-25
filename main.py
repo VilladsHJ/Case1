@@ -5,17 +5,19 @@ import pyarrow.parquet as pq
 from dash import Dash, html, dcc
 import plotly.express as px
 import plotly.graph_objects as go
-from analysis import df_elspotprices, df_average
+from analysis import df_elspotprices, df_average, list_avg
 
 app = Dash() # initialize Dash app
 
-fig1 = px.bar(df_elspotprices, x="HourUTC", y="SpotPriceDKK", color="PriceArea", barmode="group") # First bar plot with grouped prices
-fig2 = px.bar(df_average, x="HourUTC", y="AverageSpotPricesDKK", color="AverageSpotPricesDKK") # second bar plot with average prices
+fig1 = px.bar(df_elspotprices, x="HourUTC", y="SpotPriceDKK", color="PriceArea", barmode="group", hover_data="IsBelowAvg") # First bar plot with grouped prices
+fig2 = px.bar(df_elspotprices, x="HourUTC", y="AverageSpotPricesDKK", color="AverageSpotPricesDKK",barmode="overlay") # Second bar plot with average prices
+#fig3 = px.bar(df_elspotprices, x="HourUTC", y="PriceArea", color="IsBelowAvg", color_discrete_map={True: "Blue"})
+fig1.add_scatter(x=df_elspotprices["HourUTC"], y=df_elspotprices["AverageSpotPricesDKK"], mode="lines", name="Average Spot Price")
 
 app.layout = html.Div([
         html.Div([
             html.H1("Grouped Spot Prices"),
-            html.Div('''Grouped spot prices during the day'''),
+            html.Div('''Spot prices for each area during the day. Trendline showing the average spot price'''),
             dcc.Graph(id='Grouped', figure=fig1)
         ]),
         html.Div([
