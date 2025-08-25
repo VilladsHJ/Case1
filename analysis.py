@@ -13,7 +13,8 @@ import plotly.graph_objects as go
 def analysis_script():
     todays_date = dt.date.today()
 
-    filepath = f"~/github.com/VilladsHJ/Case1/elspotprices_{todays_date}" # path to the spot prices from the repository
+    #filepath = f"https://github.com/VilladsHJ/Case1/elspotprices_{todays_date}" # path to the spot prices from the repository
+    filepath = f"~/github.com/VilladsHJ/Case1/elspotprices_2025-08-25" # path to the spot prices from the repository
     elspotprices = pq.read_table(filepath)  # saving data to data a pyarrow data frame
 
     df_elspotprices = elspotprices.to_pandas() # Converting to pandas data frame
