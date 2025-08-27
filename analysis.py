@@ -1,13 +1,6 @@
-import requests
 import datetime as dt
 import pandas as pd
-import json
-import parquet
-import pyarrow as pa
 import pyarrow.parquet as pq
-from dash import Dash, html, dcc
-import plotly.express as px
-import plotly.graph_objects as go
 
 
 def analysis_script():
@@ -38,6 +31,4 @@ def analysis_script():
     df_elspotprices.insert(len(df_elspotprices.keys()), "IsBelowAvg", df_elspotprices["AverageSpotPricesDKK"]>df_elspotprices["SpotPriceDKK"]) # Inserting column "IsBelowAvg" into dataframe
 
     return df_elspotprices
-
-print(analysis_script())
 

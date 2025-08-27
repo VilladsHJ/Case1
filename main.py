@@ -1,10 +1,5 @@
-import datetime as dt
-import pandas as pd
-import pyarrow as pa
-import pyarrow.parquet as pq
 from dash import Dash, html, dcc
 import plotly.express as px
-import plotly.graph_objects as go
 import ETL
 from analysis import analysis_script
 
