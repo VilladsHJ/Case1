@@ -11,3 +11,6 @@ Requirements:
 
 The dashboard I built will fetch hourly electricity spot prices, store them in a Parquet file, and build a simple Plotly
 dashboard showing daily average prices over time.
+
+## EDIT 2025-08-27
+After the interview I recieved feedback to the code which are implemented now.
