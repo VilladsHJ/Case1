@@ -34,21 +34,10 @@ def analysis_script():
 
     df_average = pd.DataFrame(dict_average) # Creates pandas dataframe with HourUTC and Average prices from dictionary
 
-
-    # The for loop below goes through each unique timestamp and loops through all timestamps in df_elspotprices. 
-    #   If there is a match on time stamp each spot price for the corresponding time stamp is compared to the average spotprice for that timestamp. 
-    #   If the spot price is lower that the average spot a boolean value is stored (TRUE/FALSE) in the list "list_below_avg"
-    list_below_avg = []
-    list_avg = []
-    for q in range(len(df_average["HourUTC"])): # Loop through unique timestamp
-        for i in range(len(df_elspotprices["HourUTC"])-1,-1,-1): # Loop through timestamps for all spotprices - added steps to range() to reverse the order to ensure data is stored correctly 
-            if df_average["HourUTC"][q] == df_elspotprices["HourUTC"][i]: # check if timestamp is equal
-                list_below_avg.append(df_average["AverageSpotPricesDKK"][q]>df_elspotprices["SpotPriceDKK"][i]) # append Boolean ("true" if spot price is below average) 
-                list_avg.append(df_average["AverageSpotPricesDKK"][q])
-
-    df_elspotprices.insert(len(df_elspotprices.keys()), "AverageSpotPricesDKK", list_avg[::-1]) # Inserting column "AverageSpotPricesDKK" into dataframe
-    df_elspotprices.insert(len(df_elspotprices.keys()), "IsBelowAvg", list_below_avg[::-1]) # Inserting column "IsBelowAvg" into dataframe
+    df_elspotprices = pd.merge(df_elspotprices, df_average) # Merge data frames (inserting average for each time for each area)
+    df_elspotprices.insert(len(df_elspotprices.keys()), "IsBelowAvg", df_elspotprices["AverageSpotPricesDKK"]>df_elspotprices["SpotPriceDKK"]) # Inserting column "IsBelowAvg" into dataframe
 
     return df_elspotprices
 
+print(analysis_script())
 
